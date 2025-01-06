@@ -1,5 +1,6 @@
 import pandas as pd
 import argparse
+from datetime import datetime
 import re
 import os
 import sys
@@ -24,6 +25,8 @@ get_parser.add_argument('-t3', '--top3000', action='store_true', help='Limit sel
 
 remove_parser = subparsers.add_parser("remove", help='Remove an album from the pool given ID.')
 remove_parser.add_argument('album_id', type=int, help='Remove an album from the selection pool by providing the ID of the album.')
+
+list_parser = subparsers.add_parser("list", help='List the albums that have been removed from the selection pool.')
 
 reset_parser = subparsers.add_parser("reset", help='Reset the pool of albums to select from')
 
@@ -77,7 +80,8 @@ if args.command == "get":
 
 elif args.command == "remove":
     if args.album_id in albums["ID"].values:
-        albums.loc[albums["ID"] == args.album_id, "In_Pool"] = "N"
+
+        albums.loc[albums["ID"] == args.album_id, ["In_Pool", "Date"]] = ["N", datetime.now()]
         albums.to_csv(csv_path, index=False)
         print(f"Album with ID {args.album_id} has been removed.")
     else:
@@ -87,5 +91,19 @@ elif args.command == "reset":
     albums["In_Pool"] = "Y"
     albums.to_csv(csv_path, index=False)
     print("The pool has been reset.")
+
+elif args.command == "list":
+    removed_albums = albums.query('In_Pool == "N"').sort_values(by="Date", ascending=True)
+    list = []
+
+    if not removed_albums.empty:
+        for _, row in removed_albums.iterrows():
+            album = row['Album']
+            artist = row['Artist']
+            date = row['Date']
+            list.append(f"{album} by {artist} | {date}")
+        print("\n".join(list))
+    else:
+        print("There are no albums in the list.")
 else:
     parser.print_help()
