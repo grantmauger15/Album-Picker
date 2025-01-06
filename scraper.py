@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import re
 
 urls = ['https://acclaimedmusic.net/year/1940-49a.htm','https://acclaimedmusic.net/year/1950-59a.htm', 'https://acclaimedmusic.net/year/1960-69a.htm', 'https://acclaimedmusic.net/year/1970-79a.htm', 'https://acclaimedmusic.net/year/1980-89a.htm', 'https://acclaimedmusic.net/year/1990-99a.htm', 'https://acclaimedmusic.net/year/2000-09a.htm', 'https://acclaimedmusic.net/year/2010-19a.htm']
 
