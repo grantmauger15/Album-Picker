@@ -1,11 +1,20 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import sys
+import os
 
 urls = ['https://acclaimedmusic.net/year/1940-49a.htm','https://acclaimedmusic.net/year/1950-59a.htm', 'https://acclaimedmusic.net/year/1960-69a.htm', 'https://acclaimedmusic.net/year/1970-79a.htm', 'https://acclaimedmusic.net/year/1980-89a.htm', 'https://acclaimedmusic.net/year/1990-99a.htm', 'https://acclaimedmusic.net/year/2000-09a.htm', 'https://acclaimedmusic.net/year/2010-19a.htm']
 
 albums = {'Rank': [], 'All_Time': [], 'Artist': [], 'Album': [], 'Genres': [], 'Year': [], 'Decade': []}
 
+def get_csv_path():
+    if getattr(sys, 'frozen', False):
+        return os.path.join(os.path.dirname(sys.executable), 'albums.csv')
+    else:
+        return os.path.join(os.path.dirname(os.path.abspath(__file__)), 'albums.csv')
+    
+csv_path = get_csv_path()
 
 def getGenres(row):
     genres = [genre.text for genre in row.find_all('a')[2:6] if genre.text != ' ']
@@ -32,4 +41,4 @@ for url in urls:
 
 albums_df = pd.DataFrame(albums)
 albums_df["In_Pool"] = "Y"
-albums_df.to_csv(r'C:\Users\grant\Desktop\Coding\Scraps\Music\albums.csv')
+albums_df.to_csv(csv_path, index_label='ID')
