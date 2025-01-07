@@ -17,18 +17,18 @@ csv_path = get_csv_path()
 parser = argparse.ArgumentParser(description='Album management tool.')
 subparsers = parser.add_subparsers(dest="command", help='Available commands')
 
-get_parser = subparsers.add_parser("get", help='Retrieve a random album based on filters')
-get_parser.add_argument('-y', '--year', type=str, help='Put a decade, a year range, a year, or a combination of these to select an album from (e.g. "2010s", "2010-2018", "1994", "2010-2014, 2015").')
+get_parser = subparsers.add_parser("get", help='Retrieve a random album based on filters.')
+get_parser.add_argument('-y', '--year', type=str, help='Provide a decade, a year range, a year, or a combination of these to select an album from (e.g. "2010s", "2010-2018", "1994", "2010-2014, 2015").')
 get_parser.add_argument('-g', '--genre', type=str, help='Provide a genre or a list of genres to select an album from (e.g. "Punk Rock" or "Jazz, Soul, Country").')
-get_parser.add_argument('-t', '--top', action='store_true', help='Limit selection to albums in the top 100 of its decade.')
-get_parser.add_argument('-t3', '--top3000', action='store_true', help='Limit selection to albums in the top 3000 overall.')
+get_parser.add_argument('-t', '--top', type=int, help='Provide a number of albums that you want to select from. For example, if you want the top 1000 only do -t 1000')
+get_parser.add_argument('-t100', '--top100', action='store_true', help='Limit selection to albums in the top 100 of its decade.')
 
 remove_parser = subparsers.add_parser("remove", help='Remove an album from the pool given ID.')
 remove_parser.add_argument('album_id', type=int, help='Remove an album from the selection pool by providing the ID of the album.')
 
 list_parser = subparsers.add_parser("list", help='List the albums that have been removed from the selection pool.')
 
-reset_parser = subparsers.add_parser("reset", help='Reset the pool of albums to select from')
+reset_parser = subparsers.add_parser("reset", help='Reset the pool of albums to select from.')
 
 albums = pd.read_csv(csv_path)
 args = parser.parse_args()
@@ -65,11 +65,11 @@ if args.command == "get":
         conditions = " | ".join(conditions)
         album_choices = album_choices.query(conditions)
 
-    if args.top:
+    if args.top100:
         album_choices = album_choices.query('Rank <= 100 & Rank > 0')
 
-    if args.top3000:
-        album_choices = album_choices.query('All_Time <= 3000 & All_Time > 0')
+    if args.top:
+        album_choices = album_choices.query('All_Time <= @args.top & All_Time > 0')
 
     album_choices_pool = album_choices.query('In_Pool == "Y"')
     if album_choices_pool.empty:
