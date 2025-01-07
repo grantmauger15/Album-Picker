@@ -93,7 +93,9 @@ elif args.command == "reset":
     print("The pool has been reset.")
 
 elif args.command == "list":
-    removed_albums = albums.query('In_Pool == "N"').sort_values(by="Date", ascending=True)
+    removed_albums = albums.query('In_Pool == "N"')
+    if not removed_albums.empty:
+        removed_albums = removed_albums.sort_values(by="Date", ascending=True)
     list = []
 
     if not removed_albums.empty:
