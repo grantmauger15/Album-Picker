@@ -80,10 +80,12 @@ if args.command == "get":
 
 elif args.command == "remove":
     if args.album_id in albums["ID"].values:
-
-        albums.loc[albums["ID"] == args.album_id, ["In_Pool", "Date"]] = ["N", datetime.now()]
-        albums.to_csv(csv_path, index=False)
-        print(f"Album with ID {args.album_id} has been removed.")
+        if albums.loc[albums["ID"] == args.album_id, "In_Pool"].iloc[0] == "Y":
+            albums.loc[albums["ID"] == args.album_id, ["In_Pool", "Date"]] = ["N", datetime.now()]
+            albums.to_csv(csv_path, index=False)
+            print(f"Album with ID {args.album_id} has been removed.")
+        else:
+            print("That album has already been removed from the pool.")
     else:
         print(f"No album found with ID {args.album_id}.")
 
