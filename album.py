@@ -76,7 +76,7 @@ if args.command == "get":
         print("There are no albums that fit your requirements. Please try again.")
     else:
         choice = album_choices_pool.sample()
-        print(f"Album: {choice['Album'].iloc[0]} by {choice['Artist'].iloc[0]}\nGenre(s): {choice['Genres'].iloc[0]}\nYear: {choice['Year'].iloc[0]}\nID: {choice['ID'].iloc[0]}")
+        print(f"Album: {choice['Album'].iloc[0]} by {choice['Artist'].iloc[0]} [{len(album_choices_pool)} total]\nGenre(s): {choice['Genres'].iloc[0]}\nYear: {choice['Year'].iloc[0]}\nID: {choice['ID'].iloc[0]}")
 
 elif args.command == "remove":
     if args.album_id in albums["ID"].values:
