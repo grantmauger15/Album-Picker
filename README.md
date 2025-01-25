@@ -44,6 +44,10 @@ album get
 ```
 - All of the flags are optional, so if you simply want an album of any genre, year, or ranking, use the above command.
 ```bash
+album get -c 5
+```
+- The above command does the same as the one before, except it picks 5 albums instead of only 1. If you want all albums that meet your criteria, do -c 0.
+```bash
 album remove 5315
 ```
 - The above command removes an album (the one with ID 5315) from the pool of possible albums that can be selected using "album get".
