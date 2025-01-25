@@ -80,11 +80,12 @@ if args.command == "get":
         if args.count is not None:
             if args.count < 0:
                 print("A non-negative integer must be provided for the count flag. Please try again.")
-                exit(0)
+                quit()
             elif args.count == 0:
                 choices = album_choices_pool
             elif args.count > 0 and args.count > album_choices_pool.shape[0]:
                 print("Count number cannot be larger than the number of albums that fulfill requirements. Please try again.")
+                quit()
             else:
                 choices = album_choices_pool.sample(args.count)
         else:
