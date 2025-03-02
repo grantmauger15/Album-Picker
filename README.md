@@ -21,10 +21,10 @@ install.bat
 Once installed, the tool can be used from anywhere in your terminal.
 ### Basic Commands
 ```bash
-album get -y 2014 -g "Punk Rock" -t 2000
+album get -y 2014 -g "Punk Rock" -r 2000-
 ```
 - The above command will fetch a random punk rock album that was released in 2014.
-- The "-t 2000" part will filter out albums that are not in the top 2000 of all time. Change this value to what you like.
+- The "-r 2000-" part will filter out albums that are not in the top 2000 of all time. Change this value to what you like.
 - Only the top 3000 albums of all time are ranked, so making the number greater than 3000 is pointless and will not include more albums.
 ```bash
 Album: Transgender Dysphoria Blues by Against Me!
@@ -34,11 +34,16 @@ ID: 5315
 ```
 - This is one possible output of the command stated above.
 ```bash
-album get -y "2014, 1980s, 1974-1977" -g "Jazz, Soul, Country" -t100
+album get -y "2014, 1980s, 1974-1977" -g "Jazz, !Rock; Soul" -t100
 ```
 - The above command uses more complex filtering criteria. 
-- The album must be either jazz, soul, or country, and must have been released in either 2014, between 1974 and 1977, or in the 1980s.
+- The album must be either jazz (but not jazz rock) or soul, and must have been released in either 2014, between 1974 and 1977, or in the 1980s.
 - The -t100 flag will filter out albums that weren't in the top 100 for their respective decade.
+```bash
+album get -t "!Weezer" -a "Weezer"
+```
+- The above command makes use of the title and artist flags. 
+- The album must be by the band Weezer and must not be any of their self-titled albums.
 ```bash
 album get
 ```
