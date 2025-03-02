@@ -68,6 +68,7 @@ if args.command == "get":
             elif range := re.fullmatch(r'(\d{4})-(\d{4})', arg):
                 start, end = range.group(1), range.group(2)
                 conditions.append(f"Year >= {start} & Year <= {end}")
+                del range
             elif re.fullmatch(r'\d{4}', arg):
                 conditions.append(f"Year == {arg}")
             elif re.fullmatch(r'\d{4}[\-+]', arg):
@@ -83,7 +84,6 @@ if args.command == "get":
         album_choices['Year'] = pd.to_numeric(album_choices['Year'], errors='coerce').fillna(-1)
         album_choices['Year'] = album_choices['Year'].astype(int)
         album_choices = album_choices.query(conditions)
-        del range
 
     if args.genre:
         album_choices = album_choices.query(getConditional(args.genre, "Genres"))
