@@ -22,7 +22,7 @@ get_parser.add_argument('-y', '--year', type=str, help='Provide a decade, a year
 get_parser.add_argument('-g', '--genre', type=str, help='Provide a genre or a list of genres to select an album from (e.g. "Punk Rock" or "Jazz; Soul; Country").')
 get_parser.add_argument('-a', '--artist', type=str, help='Provide an artist or a list of artists to select an album from (e.g. "The Beatles" or "Led Zeppelin; Rolling Stones").')
 get_parser.add_argument('-t', '--title', type=str, help='Provide a string or a list of strings to match against titles (e.g. "Lonely; Rock; Man").')
-get_parser.add_argument('-r', '--rank', type=int, help='Provide rank requirements for your selection (e.g. 1000-, 50-100, 42).')
+get_parser.add_argument('-r', '--rank', type=str, help='Provide rank requirements for your selection (e.g. 1000-, 50-100, 42).')
 get_parser.add_argument('-t100', '--top100', action='store_true', help='Limit selection to albums in the top 100 of its decade.')
 get_parser.add_argument('-c', '--count', type=str, help='Provide a number of albums that you want to receive. If you want every album that follows your requirements, put all.')
 
