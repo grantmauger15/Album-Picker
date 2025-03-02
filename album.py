@@ -22,7 +22,7 @@ get_parser.add_argument('-y', '--year', type=str, help='Provide a decade, a year
 get_parser.add_argument('-g', '--genre', type=str, help='Provide a genre or a list of genres to select an album from (e.g. "Punk Rock" or "Jazz, Soul, Country").')
 get_parser.add_argument('-t', '--top', type=int, help='Provide a number of albums that you want to select from. For example, if you want the top 1000 only do -t 1000')
 get_parser.add_argument('-t100', '--top100', action='store_true', help='Limit selection to albums in the top 100 of its decade.')
-get_parser.add_argument('-c', '--count', type=int, help='Provide a number of albums that you want to receive. If you want every album that follows your requirements, put 0.')
+get_parser.add_argument('-c', '--count', type=str, help='Provide a number of albums that you want to receive. If you want every album that follows your requirements, put all.')
 
 remove_parser = subparsers.add_parser("remove", help='Remove an album from the pool given ID.')
 remove_parser.add_argument('album_id', type=int, help='Remove an album from the selection pool by providing the ID of the album.')
@@ -77,24 +77,28 @@ if args.command == "get":
         print("There are no albums that fit your requirements. Please try again.")
     else:
         albums = []
-        if args.count is not None:
-            if args.count < 0:
-                print("A non-negative integer must be provided for the count flag. Please try again.")
-                quit()
-            elif args.count == 0:
+        if args.count:
+            if re.fullmatch(r'\d+', args.count):
+                if int(args.count) <= 0:
+                    print("A non-negative integer must be provided for the count flag. Please try again.")
+                    quit()
+                elif int(args.count) > 0 and int(args.count) > album_choices_pool.shape[0]:
+                    print("Count number cannot be larger than the number of albums that fulfill requirements. Please try again.")
+                    quit()
+                else:
+                    choices = album_choices_pool.sample(int(args.count))
+            elif args.count == 'all':
                 choices = album_choices_pool
-            elif args.count > 0 and args.count > album_choices_pool.shape[0]:
-                print("Count number cannot be larger than the number of albums that fulfill requirements. Please try again.")
-                quit()
             else:
-                choices = album_choices_pool.sample(args.count)
+                print("Either a positive integer or \"all\" must be provided for the count flag. Please try again.")
+                quit()
         else:
             choices = album_choices_pool.sample()
 
         for _, choice in choices.iterrows():
             albums.append(f"Album: {choice['Album']} by {choice['Artist']} [{len(album_choices_pool)} total]\nGenre(s): {choice['Genres']}\nYear: {choice['Year']}\nID: {choice['ID']}")
         
-        print("\n".join(albums))
+        print("\033[34m-------------------------\033[0m\n" + "\n\033[31m-------------------------\033[0m\n".join(albums) + "\n\033[34m-------------------------\033[0m")
 
 elif args.command == "remove":
     if args.album_id in albums["ID"].values:

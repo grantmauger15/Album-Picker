@@ -46,7 +46,7 @@ album get
 ```bash
 album get -c 5
 ```
-- The above command does the same as the one before, except it picks 5 albums instead of only 1. If you want all albums that meet your criteria, do -c 0.
+- The above command does the same as the one before, except it picks 5 albums instead of only 1. If you want all albums that meet your criteria, do -c all.
 ```bash
 album remove 5315
 ```
