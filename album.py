@@ -63,12 +63,11 @@ if args.command == "get":
         conditions = []
 
         for arg in year_args:
-            if re.fullmatch(r'\d{3}0s', arg):
-                conditions.append(f"Year >= {int(arg[:-1])} & Year <= {int(arg[:-1]) + 9}")
-            elif range := re.fullmatch(r'(\d{4})-(\d{4})', arg):
+            if range := re.fullmatch(r'(\d{4})-(\d{4})', arg):
                 start, end = range.group(1), range.group(2)
                 conditions.append(f"Year >= {start} & Year <= {end}")
-                del range
+            elif re.fullmatch(r'\d{3}0s', arg):
+                conditions.append(f"Year >= {int(arg[:-1])} & Year <= {int(arg[:-1]) + 9}")
             elif re.fullmatch(r'\d{4}', arg):
                 conditions.append(f"Year == {arg}")
             elif re.fullmatch(r'\d{4}[\-+]', arg):
@@ -84,6 +83,7 @@ if args.command == "get":
         album_choices['Year'] = pd.to_numeric(album_choices['Year'], errors='coerce').fillna(-1)
         album_choices['Year'] = album_choices['Year'].astype(int)
         album_choices = album_choices.query(conditions)
+        del range
 
     if args.genre:
         album_choices = album_choices.query(getConditional(args.genre, "Genres"))
@@ -122,6 +122,7 @@ if args.command == "get":
         album_choices['All_Time'] = pd.to_numeric(album_choices['All_Time'], errors='coerce').fillna(-1)
         album_choices['All_Time'] = album_choices['All_Time'].astype(int)
         album_choices = album_choices.query(conditions)
+        del range
 
     album_choices_pool = album_choices.query('In_Pool == "Y"')
     if album_choices_pool.empty:
