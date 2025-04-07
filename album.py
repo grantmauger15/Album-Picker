@@ -4,6 +4,9 @@ from datetime import datetime
 import re
 import os
 import sys
+import warnings
+
+warnings.simplefilter('ignore')
 
 def get_csv_path():
     if getattr(sys, 'frozen', False):
